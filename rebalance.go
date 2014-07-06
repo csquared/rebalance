@@ -32,22 +32,6 @@ func getPrices(stocks []string) map[string]float64{
   return prices;
 }
 
-/*
-var targetAllocation = map[string]float64 {
-  "SCHP" : 10,
-  "SCHC" : 10,
-  "SCHB" : 70,
-  "SCHV" : 10,
-}
-
-var currentAllocation = map[string]float64 {
-  "SCHP" : 16.0766,
-  "SCHC" : 31,
-  "SCHB" : 305.7877,
-  "SCHV" : 48.2886,
-}
-*/
-
 func parseAllocation(fileName string) (map[string]float64, error) {
   var allocations = make(map[string]float64)
 
