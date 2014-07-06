@@ -80,8 +80,8 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
   }
 
   totalValue := 0.0
-  for s, a := range(currentAllocation) {
-    totalValue += a * prices[s]
+  for symbol, allocation := range(currentAllocation) {
+    totalValue += allocation * prices[symbol]
   }
 
   fmt.Println("Final percentages")
