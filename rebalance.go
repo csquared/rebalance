@@ -63,34 +63,13 @@ func parseAllocation(fileName string) (map[string]float64, error) {
   return allocations, nil;
 }
 
-func main() {
-
-  var investLimit int;
-  flag.IntVar(&investLimit, "amount", 1000, "amount to invest")
-  var targetAllocationFile string;
-  flag.StringVar(&targetAllocationFile, "target",
-    "./target-allocation.json", "json file of stock: percent")
-  var currentAllocationFile string;
-  flag.StringVar(&currentAllocationFile, "current",
-    "./current-allocation.json", "json file of stock: number of stocks")
-  flag.Parse()
-
-  targetAllocation, err := parseAllocation(targetAllocationFile);
-  if err != nil {
-    panic(err)
-  }
-  currentAllocation, err := parseAllocation(currentAllocationFile);
-  if err != nil {
-    panic(err)
-  }
-
+func balanceAllocations(investLimit int, currentAllocation, targetAllocation map[string]float64) {
   stocks := make([]string, 0, len(targetAllocation))
   for symbol := range(targetAllocation){
     stocks = append(stocks, symbol)
   }
 
   prices := getPrices(stocks)
-  fmt.Println(prices);
   buys   := make(map[string]int)
   amountInvested := 0.0
 
@@ -103,12 +82,11 @@ func main() {
       }
       currentPercent := currentValue / totalValue;
       if(currentPercent <= targetAllocation[symbol] / 100){
-        fmt.Println(currentPercent, "less than", targetAllocation[symbol], "so buy 1", symbol)
         currentAllocation[symbol] += 1
         buys[symbol] += 1;
         amountInvested += prices[symbol];
+        //fmt.Println(currentPercent, "less than", targetAllocation[symbol], "so buy 1", symbol)
       }
-  //    fmt.Println(symbol, allocation, currentValue, currentPercent);
     }
 
     if amountInvested > float64(investLimit) {
@@ -130,4 +108,27 @@ func main() {
   fmt.Println("Final allocation:",currentAllocation)
   fmt.Println("Buys to make:",buys)
   fmt.Println("Total Investment:",totalValue)
+}
+
+func main() {
+  var investLimit int;
+  flag.IntVar(&investLimit, "amount", 1000, "amount to invest")
+  var targetAllocationFile string;
+  flag.StringVar(&targetAllocationFile, "target",
+    "./target-allocation.json", "json file of stock: percent")
+  var currentAllocationFile string;
+  flag.StringVar(&currentAllocationFile, "current",
+    "./current-allocation.json", "json file of stock: number of stocks")
+  flag.Parse()
+
+  targetAllocation, err := parseAllocation(targetAllocationFile);
+  if err != nil {
+    panic(err)
+  }
+  currentAllocation, err := parseAllocation(currentAllocationFile);
+  if err != nil {
+    panic(err)
+  }
+
+  balanceAllocations(investLimit, currentAllocation, targetAllocation)
 }
