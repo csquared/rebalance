@@ -54,6 +54,7 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
   }
 
   prices := getPrices(stocks)
+  fmt.Println("Prices", prices);
   buys   := make(map[string]int)
   amountInvested := 0.0
 
