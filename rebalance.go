@@ -8,27 +8,35 @@ import (
   "strings"
   "strconv"
   "flag"
+  "sync"
 )
 
 func getPrices(stocks []string) map[string]float64{
   prices := make(map[string]float64);
 
-  for _,symbol := range(stocks) {
-    resp, err := http.Get("http://www.google.com/finance/info?q=" + symbol)
-    if(err != nil){
-      panic("HTTP price lookup failed")
-    }
-    defer resp.Body.Close()
+  var wg sync.WaitGroup
+  for _,_symbol := range(stocks) {
+    wg.Add(1)
+    go func(symbol string){
+      defer wg.Done()
 
-    //this is ugly
-    body, err := ioutil.ReadAll(resp.Body)
-    bodyString := strings.TrimLeft(string(body), "/ \n")
-    var f interface{}
-    err = json.Unmarshal([]byte(bodyString), &f)
-    m := f.([]interface{})
-    first := m[0].(map[string]interface{})
-    prices[symbol], err = strconv.ParseFloat(first["l"].(string), 64)
+      resp, err := http.Get("http://www.google.com/finance/info?q=" + symbol)
+      if(err != nil){
+        panic("HTTP stock price lookup failed")
+      }
+      defer resp.Body.Close()
+
+      //this is ugly
+      body, err := ioutil.ReadAll(resp.Body)
+      bodyString := strings.TrimLeft(string(body), "/ \n")
+      var f interface{}
+      err = json.Unmarshal([]byte(bodyString), &f)
+      m := f.([]interface{})
+      first := m[0].(map[string]interface{})
+      prices[symbol], err = strconv.ParseFloat(first["l"].(string), 64)
+    }(_symbol)
   }
+  wg.Wait()
   return prices;
 }
 
