@@ -51,19 +51,29 @@ func getPrices(stocks []string) map[string]float64{
   return prices;
 }
 
-func parseAllocation(fileName string) (map[string]float64, error) {
+func parseAllocation(allocationData []byte) (map[string]float64, error){
   var allocations = make(map[string]float64)
+  err := json.Unmarshal(allocationData, &allocations)
+  if(err != nil){
+    return nil, err;
+  }
+  return allocations, nil;
+}
 
+func readAllocation(fileName string) (map[string]float64, error) {
   allocationData, err := ioutil.ReadFile(fileName);
   if(err != nil){
     return nil, err;
   }
-  err = json.Unmarshal(allocationData, &allocations)
+  return parseAllocation(allocationData);
+}
+
+func readAllocationStdin() (map[string]float64, error) {
+  allocationData, err := ioutil.ReadAll(os.Stdin);
   if(err != nil){
     return nil, err;
   }
-
-  return allocations, nil;
+  return parseAllocation(allocationData);
 }
 
 func balanceAllocations(investAmount int, currentAllocation, targetAllocation map[string]float64) {
@@ -137,11 +147,23 @@ func main() {
     "./current-allocation.json", "json file of stock: number of stocks")
   flag.Parse()
 
-  targetAllocation, err := parseAllocation(targetAllocationFile);
+  fi, err := os.Stdin.Stat()
   if err != nil {
     log.Fatal(err)
   }
-  currentAllocation, err := parseAllocation(currentAllocationFile);
+
+  var currentAllocation map[string]float64;
+  if fi.Size() > 0 {
+    currentAllocation, err = readAllocationStdin()
+  } else {
+    currentAllocation, err = readAllocation(currentAllocationFile)
+  }
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  targetAllocation, err := readAllocation(targetAllocationFile);
   if err != nil {
     log.Fatal(err)
   }

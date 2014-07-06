@@ -57,3 +57,7 @@ You can pipe standard output to save the new allocations and feed into the next 
 
     $ rebalance -amount=2500 > new-allocation.json
     $ rebalance -amount=2500 -current=new-allocation.json
+
+Or pipe it ftw
+
+    $ cat new-allocation.json | rebalance -amount=2500
