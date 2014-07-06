@@ -10,10 +10,10 @@ a portfolio using an asset allocation strategy
 ### options
 
 * `amount`: amount to invest in USD
-* `current`: json file of current investments (defaults to
-  `./current-allocation.json`)
-* `target`: json file of target allocation (defaults to
-  `./target-allocation.json`)
+* `current`: json file of current investments in number of
+  stocks (defaults to `./current-allocation.json`)
+* `target`: json file of target allocation in whole percentages
+  (defaults to `./target-allocation.json`)
 
 ### example
 
