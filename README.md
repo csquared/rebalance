@@ -17,15 +17,49 @@ a portfolio using an asset allocation strategy
 
 ### example
 
+    $ cat current-allocation.json
+    {
+      "SCHP" : 25,
+      "SCHC" : 10,
+      "SCHB" : 300,
+      "SCHV" : 50
+    }
+
+    $ cat target-allocation.json
+    {
+      "SCHP" : 10,
+      "SCHC" : 10,
+      "SCHB" : 70,
+      "SCHV" : 10
+    }
+
     $ rebalance -amount=2500
-    Prices map[SCHC:34.78 SCHV:43.25 SCHB:48.26 SCHP:55.1]
-    Starting allocation: map[SCHP:16.0766 SCHC:31 SCHB:305.7877
-    SCHV:48.2886]
-    Final allocation: map[SCHV:49.2886 SCHP:39.0766 SCHC:62 SCHB:309.7877]
+    Prices map[SCHV:43.25 SCHB:48.26 SCHC:34.78 SCHP:55.1]
+    Starting allocation: map[SCHC:10 SCHB:300 SCHV:50 SCHP:25]
+    Final allocation: map[SCHP:38 SCHC:59 SCHB:303 SCHV:50]
     Final percentages
-    SCHP 10.065277867638994
-    SCHC 10.080420937794552
-    SCHB 69.88900997114104
-    SCHV 9.965291223425405
-    Buys to make: map[SCHB:4 SCHP:23 SCHC:31 SCHV:1]
-    Total Investment: 21391.567012
+    SCHC 9.803689247101204
+    SCHB 69.86149796236222
+    SCHV 10.33151626049276
+    SCHP 10.003296530043812
+    Buys to make
+    SCHB 3
+    SCHP 13
+    SCHC 49
+    Total Investment: 20931.1
+
+    $ rebalance -amount=5000
+    Prices map[SCHP:55.1 SCHC:34.78 SCHV:43.25 SCHB:48.26]
+    Starting allocation: map[SCHP:25 SCHC:10 SCHB:300 SCHV:50]
+    Final allocation: map[SCHP:43 SCHC:68 SCHB:339 SCHV:55]
+    Final percentages
+    SCHP 10.09362580266968
+    SCHC 10.07547746944072
+    SCHB 69.69701229869088
+    SCHV 10.133884429198709
+    Buys to make
+    SCHP 18
+    SCHC 58
+    SCHB 39
+    SCHV 5
+    Total Investment: 23473.23
