@@ -9,6 +9,7 @@ import (
   "strconv"
   "flag"
   "sync"
+  "log"
 )
 
 func getPrices(stocks []string) map[string]float64{
@@ -22,7 +23,7 @@ func getPrices(stocks []string) map[string]float64{
 
       resp, err := http.Get("http://www.google.com/finance/info?q=" + symbol)
       if(err != nil){
-        panic("HTTP stock price lookup failed")
+        log.Fatal(err)
       }
       defer resp.Body.Close()
 
@@ -117,11 +118,11 @@ func main() {
 
   targetAllocation, err := parseAllocation(targetAllocationFile);
   if err != nil {
-    panic(err)
+    log.Fatal(err)
   }
   currentAllocation, err := parseAllocation(currentAllocationFile);
   if err != nil {
-    panic(err)
+    log.Fatal(err)
   }
 
   balanceAllocations(investLimit, currentAllocation, targetAllocation)
