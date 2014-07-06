@@ -58,6 +58,7 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
   buys   := make(map[string]int)
   amountInvested := 0.0
 
+  fmt.Println("Starting allocation:",currentAllocation)
   for {
     for symbol, allocation := range(currentAllocation) {
       currentValue := allocation * prices[symbol]
@@ -84,13 +85,13 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
     totalValue += allocation * prices[symbol]
   }
 
+  fmt.Println("Final allocation:",currentAllocation)
   fmt.Println("Final percentages")
   for symbol, allocation := range(currentAllocation) {
     value := allocation * prices[symbol]
     fmt.Println(symbol, value/totalValue*100)
   }
 
-  fmt.Println("Final allocation:",currentAllocation)
   fmt.Println("Buys to make:",buys)
   fmt.Println("Total Investment:",totalValue)
 }
