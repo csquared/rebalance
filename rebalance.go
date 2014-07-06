@@ -7,6 +7,7 @@ import (
   "encoding/json"
   "strings"
   "strconv"
+  "flag"
 )
 
 func getPrices(stocks []string) map[string]float64{
@@ -54,7 +55,10 @@ func main() {
   fmt.Println(prices);
   buys   := make(map[string]int)
   amountInvested := 0.0
-  investLimit := 2500.0
+
+  var investLimit int;
+  flag.IntVar(&investLimit, "amount", 1000, "amount to invest")
+  flag.Parse()
 
   for {
     for symbol, allocation := range(currentAllocation) {
@@ -73,7 +77,7 @@ func main() {
   //    fmt.Println(symbol, allocation, currentValue, currentPercent);
     }
 
-    if amountInvested > investLimit {
+    if amountInvested > float64(investLimit) {
       break
     }
   }
