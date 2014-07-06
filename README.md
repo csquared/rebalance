@@ -2,6 +2,9 @@
 
 Rebalance your portfolio
 
+rebalance.go tells you what stocks to buy when investing more money into
+a portfolio using an asset allocation strategy
+
 ## Usage
 
 ### options

@@ -101,7 +101,11 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
     fmt.Println(symbol, value/totalValue*100)
   }
 
-  fmt.Println("Buys to make:",buys)
+  fmt.Println("Buys to make")
+  for symbol, buys := range(buys) {
+    fmt.Println(symbol, buys)
+  }
+  //fmt.Println("Buys to make:",buys)
   fmt.Println("Total Investment:",totalValue)
 }
 
