@@ -10,6 +10,7 @@ import (
   "flag"
   "sync"
   "log"
+  "os"
 )
 
 func checkTarget(target map[string]float64) bool {
@@ -72,11 +73,11 @@ func balanceAllocations(investAmount int, currentAllocation, targetAllocation ma
   }
 
   prices := getPrices(stocks)
-  fmt.Println("Prices", prices);
+  fmt.Fprintln(os.Stderr, "Prices", prices);
   buys   := make(map[string]int)
   amountInvested := 0.0
 
-  fmt.Println("Starting allocation:",currentAllocation)
+  fmt.Fprintln(os.Stderr, "Starting allocation:",currentAllocation)
   for {
     for symbol, allocation := range(currentAllocation) {
       currentValue := allocation * prices[symbol]
@@ -103,19 +104,26 @@ func balanceAllocations(investAmount int, currentAllocation, targetAllocation ma
     totalValue += allocation * prices[symbol]
   }
 
-  fmt.Println("Final allocation:",currentAllocation)
-  fmt.Println("Final percentages")
+  fmt.Fprintln(os.Stderr, "Final allocation:",currentAllocation)
+  fmt.Fprintln(os.Stderr, "Final percentages")
   for symbol, allocation := range(currentAllocation) {
     value := allocation * prices[symbol]
-    fmt.Println(symbol, value/totalValue*100)
+    fmt.Fprintln(os.Stderr, symbol, value/totalValue*100)
   }
 
-  fmt.Println("Buys to make")
+  fmt.Fprintln(os.Stderr, "Buys to make")
   for symbol, buys := range(buys) {
-    fmt.Println(symbol, buys)
+    fmt.Fprintln(os.Stderr, symbol, buys)
   }
-  //fmt.Println("Buys to make:",buys)
-  fmt.Println("Total Investment:",totalValue)
+  //fmt.Fprintln(os.Stderr, "Buys to make:",buys)
+  fmt.Fprintln(os.Stderr, "Total Investment:",totalValue)
+
+  fmt.Fprintln(os.Stderr, "New allocation")
+  allocationJSON, err := json.Marshal(currentAllocation)
+  if(err != nil){
+    log.Fatal(err)
+  }
+  fmt.Println(string(allocationJSON))
 }
 
 func main() {
