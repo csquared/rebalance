@@ -65,7 +65,7 @@ func parseAllocation(fileName string) (map[string]float64, error) {
   return allocations, nil;
 }
 
-func balanceAllocations(investLimit int, currentAllocation, targetAllocation map[string]float64) {
+func balanceAllocations(investAmount int, currentAllocation, targetAllocation map[string]float64) {
   stocks := make([]string, 0, len(targetAllocation))
   for symbol := range(targetAllocation){
     stocks = append(stocks, symbol)
@@ -93,7 +93,7 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
       }
     }
 
-    if amountInvested > float64(investLimit) {
+    if amountInvested > float64(investAmount) {
       break
     }
   }
@@ -119,8 +119,8 @@ func balanceAllocations(investLimit int, currentAllocation, targetAllocation map
 }
 
 func main() {
-  var investLimit int;
-  flag.IntVar(&investLimit, "amount", 1000, "amount to invest")
+  var investAmount int;
+  flag.IntVar(&investAmount, "amount", 1000, "amount to invest")
   var targetAllocationFile string;
   flag.StringVar(&targetAllocationFile, "target",
     "./target-allocation.json", "json file of stock: percent")
@@ -141,5 +141,5 @@ func main() {
   if !checkTarget(targetAllocation) {
     log.Fatal("Target allocation does not add up to 100%")
   }
-  balanceAllocations(investLimit, currentAllocation, targetAllocation)
+  balanceAllocations(investAmount, currentAllocation, targetAllocation)
 }
