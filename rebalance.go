@@ -12,6 +12,15 @@ import (
   "log"
 )
 
+func checkTarget(target map[string]float64) bool {
+  total := 0.0
+  for _,allocation := range(target){
+    total += allocation;
+  }
+
+  return total == 100;
+}
+
 func getPrices(stocks []string) map[string]float64{
   prices := make(map[string]float64);
 
@@ -129,5 +138,8 @@ func main() {
     log.Fatal(err)
   }
 
+  if !checkTarget(targetAllocation) {
+    log.Fatal("Target allocation does not add up to 100%")
+  }
   balanceAllocations(investLimit, currentAllocation, targetAllocation)
 }
