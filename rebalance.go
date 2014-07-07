@@ -22,6 +22,10 @@ func checkTarget(target map[string]float64) bool {
 	return total == 100
 }
 
+type StockQuote struct {
+	Price string `json:"l"`
+}
+
 func getPrices(stocks []string) map[string]float64 {
 	prices := make(map[string]float64)
 
@@ -37,14 +41,16 @@ func getPrices(stocks []string) map[string]float64 {
 			}
 			defer resp.Body.Close()
 
-			//this is ugly
 			body, err := ioutil.ReadAll(resp.Body)
 			bodyString := strings.TrimLeft(string(body), "/ \n")
-			var f interface{}
-			err = json.Unmarshal([]byte(bodyString), &f)
-			m := f.([]interface{})
-			first := m[0].(map[string]interface{})
-			prices[symbol], err = strconv.ParseFloat(first["l"].(string), 64)
+			var quotes []StockQuote
+			err = json.Unmarshal([]byte(bodyString), &quotes)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(quotes)
+
+			prices[symbol], err = strconv.ParseFloat(quotes[0].Price, 64)
 		}(_symbol)
 	}
 	wg.Wait()
