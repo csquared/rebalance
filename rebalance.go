@@ -48,7 +48,6 @@ func getPrices(stocks []string) map[string]float64 {
 			if err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println(quotes)
 
 			prices[symbol], err = strconv.ParseFloat(quotes[0].Price, 64)
 		}(_symbol)
